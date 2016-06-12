@@ -2,7 +2,7 @@
 Hello World. See all your lists here.
 
 <ul>
-  {% for list_name in list_names %}
-    <li><a href="#">{{list_name}}</a></li>
+  {% for list in todo_lists %}
+    <li><a href="{% url 'todo:lists_detail' list.id %}">{{list.name}}</a></li>
   {% endfor %}
 </ul>

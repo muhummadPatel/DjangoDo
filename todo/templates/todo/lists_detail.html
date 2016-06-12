@@ -1,0 +1,7 @@
+<h1>{{todo_list.name}}</h1>
+<br />
+<ul>
+  {% for todo in todos %}
+    <li>{{todo.item_text}}</li>
+  {% endfor %}
+</ul>
