@@ -1,2 +1,8 @@
 /todo/lists.html
 Hello World. See all your lists here.
+
+<ul>
+  {% for list_name in list_names %}
+    <li><a href="#">{{list_name}}</a></li>
+  {% endfor %}
+</ul>
