@@ -1,7 +1,27 @@
-<h1>{{todo_list.name}}</h1>
+{% if message %}
+  {{message}}
+{% endif %}
 <br />
-<ul>
-  {% for todo in todos %}
-    <li>{{todo.item_text}}</li>
-  {% endfor %}
-</ul>
+<form action="{% url 'todo:lists_detail' todo_list.id %}" method="post">
+  {% csrf_token %}
+  <hr />
+  <h1>{{todo_list.name}}</h1>
+
+  <ul>
+    {% for todo in todos %}
+      <li>
+        <span>
+          <input type="checkbox" name="{{todo.id}}" {% if todo.completed %}checked{% endif %}/>
+        </span>
+
+        {% if todo.completed %}
+          <strike>{{todo.item_text}}</strike>
+        {% else %}
+          {{todo.item_text}}
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+
+  <input type="submit" value="Update"/>
+</form>
