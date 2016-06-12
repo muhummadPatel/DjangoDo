@@ -4,6 +4,9 @@
 # bower_components
 bower_components
 
+# secret keys
+secrets.py
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
