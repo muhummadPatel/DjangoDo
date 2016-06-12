@@ -8,8 +8,14 @@ class TodoList(models.Model):
     # TODO: add a 'tag' field to allow users to tag and filter lists
     name = models.CharField(max_length=50)
 
+    def __str__(self):
+        return self.name
+
 
 class Todo(models.Model):
     parent_list = models.ForeignKey(TodoList, on_delete=models.CASCADE)
     item_text = models.CharField(max_length=200)
     completed = models.BooleanField()
+
+    def __str__(self):
+        return "%s--%s" % (self.item_text, self.completed)
