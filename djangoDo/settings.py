@@ -31,13 +31,14 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'todo.apps.TodoConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'todo.apps.TodoConfig',
+    'pipeline',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -120,3 +121,25 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 STATIC_URL = '/static/'
+STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
+PIPELINE = {
+    'PIPELINE_ENABLED': False,
+    'PIPELINE_COLLECTOR_ENABLED': False,
+    'STYLESHEETS': {
+        'libraries': {
+            'source_filenames': (
+              'todo/bower_components/Materialize/dist/css/materialize.css',
+            ),
+            'output_filename': 'css/libs.min.css',
+        },
+    },
+    'JAVASCRIPT': {
+        'libraries': {
+            'source_filenames': (
+              'todo/bower_components/jquery/dist/jquery.js',
+              'todo/bower_components/Materialize/dist/materialize.js',
+            ),
+            'output_filename': 'js/libs.min.js',
+        }
+    }
+}

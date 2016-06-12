@@ -1,0 +1,8 @@
+{
+  "name": "DjangoDo",
+  "version": "0.1.0",
+  "dependencies": {
+    "Materialize": "materialize#^0.97.6",
+    "jquery": "^3.0.0"
+  }
+}
