@@ -8,6 +8,55 @@
 {% block title_b %} DjangoDo - Home {% endblock title_b %}
 
 {% block main_body_b %}
+  <div class="container">
+    <div class="row">
+      <br />
+      <h5>Welcome, <strong>{{ user.get_username }}</strong> !</h5>
+    </div>
+
+    <div class="row">
+      <div class="col s12 m5 z-depth-2 collection with-header">
+        <h4 class="collection-header">Lists</h4>
+        <a href="#!" class="collection-item active">Alvin</a>
+        <a href="#!" class="collection-item">Alvin</a>
+        <a href="#!" class="collection-item">Alvin</a>
+        <a href="#!" class="collection-item">Alvin</a>
+        <a href="#modal1" class="collection-item modal-trigger"><i class="material-icons md-18">add</i></a>
+        <!--<a class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons">add</i></a>-->
+      </div>
+
+      <div class="col s12 m5 offset-m1" style="background:yellow;">
+        <!--
+          TODO: display all list items as checkboxes with labels showing item text.
+          TODO: js to populate the page and hadle updating the view and
+          posting/getting data from the backend.
+        -->
+        <p>
+          [PLACEHOLDER]
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </p>
+      </div>
+    </div>
+  </div>
 
 
+  <!-- modal: create new todolist -->
+  <div id="modal1" class="modal">
+    <div class="modal-content">
+      <h4>New Todo List</h4>
+
+      <form id="new_list_form" method="post" action=".">
+        {% csrf_token %}
+
+        <div class="input-field">
+          <input id="todolist_name" type="text" class="validate">
+          <label for="todolist_name">List Name</label>
+        </div>
+      </form>
+    </div>
+
+    <div class="modal-footer">
+      <button class="modal-action modal-close btn orange waves-effect waves-light" form="new_list_form" type="submit" name="action">Create<i class="material-icons right">send</i></button>
+    </div>
+  </div>
 {% endblock main_body_b %}
