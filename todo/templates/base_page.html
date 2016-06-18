@@ -1,0 +1,61 @@
+{% load staticfiles pipeline %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+  <title>
+    {% block title_b%} DjangoDo {% endblock title_b %}
+  </title>
+
+  <!-- CSS  -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  {% stylesheet 'libraries' %}
+  {% stylesheet 'custom' %}
+  {% block extra_css_b %}{% endblock extra_css_b %}
+</head>
+<body>
+
+  <nav class="teal lighten-1" role="navigation">
+    <div class="nav-wrapper container"><a id="logo-container" href="{% url 'todo:index' %}" class="brand-logo">DjangoDo</a>
+      <ul class="right hide-on-med-and-down">
+        {% block nav_ul_desktop_b %}{% endblock nav_ul_desktop_b %}
+      </ul>
+
+      <ul id="nav-mobile" class="side-nav">
+        {% block nav_ul_mobile_b %}{% endblock nav_ul_mobile_b %}
+      </ul>
+      <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+    </div>
+  </nav>
+
+  <main>
+    {% block pre_main_body_b %}{% endblock pre_main_body_b %}
+
+    {% block main_body_b %}
+    {% endblock main_body_b %}
+  </main>
+
+  <footer class="page-footer teal">
+    <div class="container">
+      {% block footer_b %}{% endblock footer_b %}
+    </div>
+
+    <div class="footer-copyright">
+      <div class="container">
+        {% block footer_copyright_b %}
+          Made by <a class="teal-text text-lighten-3" href="#">Muhummad Patel</a>
+        {% endblock footer_copyright_b %}
+      </div>
+    </div>
+  </footer>
+
+
+  <!--  Scripts-->
+  {% javascript 'libraries' %}
+  {% javascript 'custom' %}
+  {% block extra_js_b %}{% endblock extra_js_b %}
+
+  </body>
+</html>
