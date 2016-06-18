@@ -85,6 +85,7 @@ DATABASES = {
     }
 }
 
+LOGIN_REDIRECT_URL = '/home'
 
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
@@ -118,7 +119,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
@@ -134,14 +134,26 @@ PIPELINE = {
             ),
             'output_filename': 'css/libs.min.css',
         },
+        'custom': {
+            'source_filenames': (
+              'todo/css/custom.css',
+            ),
+            'output_filename': 'css/custom.min.css',
+        },
     },
     'JAVASCRIPT': {
         'libraries': {
             'source_filenames': (
               'todo/bower_components/jquery/dist/jquery.js',
-              'todo/bower_components/Materialize/dist/materialize.js',
+              'todo/bower_components/Materialize/dist/js/materialize.js',
             ),
             'output_filename': 'js/libs.min.js',
-        }
+        },
+        'custom': {
+            'source_filenames': (
+                'todo/js/init.js',
+            ),
+            'output_filename': 'js/custom.min.js',
+        },
     }
 }
