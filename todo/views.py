@@ -1,3 +1,5 @@
+from django.contrib.auth.decorators import login_required
+from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_list_or_404, get_object_or_404, render
 from django.views.decorators.http import require_GET, require_http_methods
@@ -7,9 +9,18 @@ from .models import Todo, TodoList
 
 @require_GET
 def index(request):
-    return render(request, 'todo/index.html', {})
+    if request.user.is_authenticated():
+        return HttpResponseRedirect(reverse('todo:home'))
+    else:
+        return render(request, 'todo/index.html', {})
 
 
+@login_required
+def home(request):
+    return render(request, 'todo/home.html', {})
+
+
+@login_required
 @require_GET
 def lists(request):
     todo_lists = get_list_or_404(TodoList)
