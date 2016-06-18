@@ -1,11 +1,13 @@
 from __future__ import unicode_literals
 
+from django.contrib.auth.models import User
 from django.db import models
 
 
 class TodoList(models.Model):
     # TODO: add user as a foreign key to the user table?
     # TODO: add a 'tag' field to allow users to tag and filter lists
+    owner = models.ForeignKey(User, editable=False, default=None)
     name = models.CharField(max_length=50)
 
     def __str__(self):
