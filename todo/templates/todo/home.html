@@ -107,20 +107,19 @@
     }
 
     // Add a new list when the user submits the new-list-form
-    function create_list(list_name){
+    $("#new-list-form").on('submit', function(event){
+      event.preventDefault();
+
+      list_name = $("#todolist-name").val();
       console.log("creating list:" + list_name);
+      
       data = { todolist_name: list_name };
       $.post("{% url 'todo:lists' %}", data, function(){
         console.log("Successfully created " + list_name);
         update_lists();
       }).fail(function(){
-        alert("Sorry. Could not create " + list_name);
+        alert("Sorry. Could not create " + list_name + ". :/");
       });
-    }
-    $("#new-list-form").on('submit', function(event){
-      event.preventDefault();
-      list_name = $("#todolist-name").val();
-      create_list(list_name);
     });
 
     // When the user clicks on one of their lists, make it active and show the items
