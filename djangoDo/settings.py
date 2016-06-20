@@ -149,7 +149,7 @@ PIPELINE = {
             ),
             'output_filename': 'js/libs.min.js',
         },
-        'custom': {
+        'init_js': {
             'source_filenames': (
                 'todo/js/init.js',
             ),
