@@ -41,35 +41,26 @@ def lists(request):
             return HttpResponse("", status=400)
 
 
-@require_http_methods(['GET', 'POST'])
+@login_required
+@require_POST
+def delete_list(request, list_id):
+    # TODO: handle other errors? are there any other errors?
+    todo_list = get_object_or_404(TodoList, pk=list_id, owner__exact=request.user)
+    todo_list.delete()
+    return HttpResponse("", status=200)
+
+
+@login_required
+@require_GET
 def lists_detail(request, list_id):
-    if request.method == 'GET':
-        todo_list = get_object_or_404(TodoList, pk=list_id)
-        todos = get_list_or_404(Todo, parent_list=list_id)
+    # do this first get so that a 404 is raised if the list does not exist
+    todo_list = get_object_or_404(TodoList, pk=list_id, owner__exact=request.user)
+    todo_items = []
+    try:
+        todo_items = Todo.objects.filter(parent_list=list_id)
+    except Todo.DoesNotExist:
+        # if the list is currently empty, return an empty response to the client
+        pass
 
-        context = {
-            'todo_list': todo_list,
-            'todos': todos
-        }
-
-        return render(request, 'todo/lists_detail.html', context)
-
-    elif request.method == 'POST':
-        todo_list = get_object_or_404(TodoList, pk=list_id)
-        todos = get_list_or_404(Todo, parent_list=list_id)
-
-        completed_todos = [todo for todo in request.POST.keys()]
-        for todo in todos:
-            # TODO: Do this as a transaction. Possible race condition here? F()?
-            updated_state = str(todo.id) in completed_todos
-            if not todo.completed == updated_state:
-                todo.completed = updated_state
-                todo.save()
-
-        context = {
-            'todo_list': todo_list,
-            'todos': todos,
-            'message': "Successfully updated"
-        }
-
-        return render(request, 'todo/lists_detail.html', context)
+    response_data = serializers.serialize('json', todo_items)
+    return HttpResponse(response_data, content_type='application/json')

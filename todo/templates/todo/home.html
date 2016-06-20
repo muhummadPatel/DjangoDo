@@ -18,30 +18,39 @@
 
     <div class="row">
       <!-- todo lists card -->
-      <div class="col s12 m5 z-depth-2 collection with-header">
-        <h4 class="collection-header">Lists</h4>
+      <ul class="col s12 m5 z-depth-2 collection with-header">
+        <li class="collection-header"><h4>Lists</h4></li>
         <div id="user-list-names">
           <!-- populated by ajax request -->
         </div>
 
-        <a href="#add-list-modal" class="collection-item modal-trigger"><i class="material-icons md-18">add</i></a>
-        <!--<a class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons">add</i></a>-->
-      </div>
+        <li id="add-list-btn" class="collection-item">
+          <div>
+            <a href="#add-list-modal" class="modal-trigger">
+              <i class="material-icons md-18">add</i>
+            </a>
+          </div>
+        </li>
+      </ul>
 
       <!-- todo items card -->
-
-      <div class="col s12 m5 offset-m1 z-depth-2 collection with-header">
+      <ul class="col s12 m5 offset-m1 z-depth-2 collection with-header">
         <h4 id="active-list-name" class="collection-header">Todo Items</h4>
         <div id="list-items">
-          <p id="list-items-prompt">
-            Please select one of your lists
+          <p id="list-items-prompt" class="light grey-text center">
+            Please select a list from the 'Lists' card
           </p>
           <!-- populated by ajax request -->
         </div>
 
-        <a href="#add-item-modal" class="collection-item modal-trigger hide"><i class="material-icons md-18">add</i></a>
-        <!--<a class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons">add</i></a>-->
-      </div>
+        <li id="add-list-btn" class="collection-item">
+          <div>
+            <a id="add-item-btn" href="#add-item-modal" class="modal-trigger hide">
+              <i class="material-icons md-18">add</i>
+            </a>
+          </div>
+        </li>
+      </ul>
     </div>
   </div>
 
@@ -97,12 +106,14 @@
     // Get all the users lists and add them to the page
     function update_lists(){
       $("#user-list-names").empty();
-      $.getJSON("{% url 'todo:lists'%}", function(user_lists){
+
+      $.getJSON("/lists/", function(user_lists){
         $.each(user_lists, function(index, user_list){
           list_id = user_list["pk"];
           list_name = user_list["fields"]["name"];
-          $("#user-list-names").append("<a id=\"listid_" + list_id + "\" href=\"#\" class=\"collection-item\">" + list_name + "</a>");
-        })
+          list_html = "<li class=\"collection-item\"><div><a id=\"listname_" + list_id + "\" href=\"#\">" + list_name + "</a><a id=\"deletelist_" + list_id + "\" href=\"#\" class=\"secondary-content\"><i class=\"material-icons md-18\">delete</i></a><div></li>"
+          $("#user-list-names").append(list_html);
+        });
       });
     }
 
@@ -112,25 +123,75 @@
 
       list_name = $("#todolist-name").val();
       console.log("creating list:" + list_name);
-      
+
       data = { todolist_name: list_name };
-      $.post("{% url 'todo:lists' %}", data, function(){
+      $.post("/lists/", data, function(){
         console.log("Successfully created " + list_name);
         update_lists();
       }).fail(function(){
-        alert("Sorry. Could not create " + list_name + ". :/");
+        console.log("Error. POST to create list failed.");
+        alert("Sorry, an error occurred. :/");
       });
     });
 
+    // Delete a list when the user clicks the trash can
+    $("#user-list-names").on("click", ".secondary-content", function(){
+      // get the id of the list to be deleted
+      list_id = $(this).attr("id").match(/\d+/g);
+      if(list_id.length == 0){
+        console.log("Error. Could not identify id of list to be deleted.");
+        alert("Sorry, an error occurred. :/");
+      }else{
+        list_id = list_id[0];
+      }
+
+      // POST to delete the specified list
+      $.post("/lists/" + list_id + "/delete/", function(){
+        console.log("Successfully deleted " + list_name);
+        update_lists();
+      }).fail(function(){
+        console.log("Error. POST to delete list failed.");
+        alert("Sorry, an error occurred. :/");
+      });
+    });
+
+    // get the items of list 'list_id' and display them in the #list-items card
+    function update_items(list_id){
+      $.getJSON("/lists/" + list_id + "/items/" , function(list_items){
+        $("#list-items-prompt").addClass("hide");
+        $("#add-item-btn").removeClass("hide");
+        $("#active-list-name").html(list_name);
+        $("#list-items").empty();
+
+        $.each(list_items, function(index, list_item){
+          item_id = list_item["pk"];
+          item_text = list_item["fields"]["item_text"];
+          status = (list_item["fields"]["completed"])? "checked": "";
+
+          cbox_id = "listitem_" + item_id;
+          item_html = "<li class=\"collection-item\"><input id=\"" + cbox_id + "\" name=\"" + cbox_id + "\" type=\"checkbox\" " + status + "></input><label for=\"" + cbox_id + "\">" + item_text + "</label></li>"
+          $("#list-items").append(item_html);
+        });
+        console.log(list_items);
+      });
+    }
+
     // When the user clicks on one of their lists, make it active and show the items
-    $("#user-list-names").on("click", ".collection-item", function(){
+    $("#user-list-names").on("click", ".collection-item a", function(){
       // make the selected list active
       $(".collection-item").removeClass("active");
-      $(this).addClass("active");
+      $(this).closest(".collection-item").addClass("active");
 
       // get and display the items in this list
-      // list_items = get_list_items(list_id)
-      console.log($(this).attr("id"));
+      list_name = $(this).text();
+      list_id = $(this).attr("id").match(/\d+/g);
+      if(list_id.length == 0){
+        console.log("Error. Could not identify id of list to be displayed.");
+        alert("Sorry, an error occurred. :/");
+      }else{
+        list_id = list_id[0];
+      }
+      update_items(list_id);
     });
   </script>
 {% endblock extra_js_b %}
