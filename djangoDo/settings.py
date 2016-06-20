@@ -146,6 +146,7 @@ PIPELINE = {
             'source_filenames': (
               'todo/bower_components/jquery/dist/jquery.js',
               'todo/bower_components/Materialize/dist/js/materialize.js',
+              'todo/bower_components/js-cookie/src/js.cookie.js',
             ),
             'output_filename': 'js/libs.min.js',
         },
