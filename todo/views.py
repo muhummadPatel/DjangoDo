@@ -25,17 +25,20 @@ def home(request):
 
 
 @login_required
-@require_GET
+@require_http_methods(['GET', 'POST'])
 def lists(request):
-    user_todo_lists = TodoList.objects.filter(owner__exact=request.user)
-    response_data = serializers.serialize('json', user_todo_lists)
-    return HttpResponse(response_data, content_type='application/json')
+    if request.method == 'GET':
+        user_todo_lists = TodoList.objects.filter(owner__exact=request.user)
+        response_data = serializers.serialize('json', user_todo_lists)
+        return HttpResponse(response_data, content_type='application/json')
 
-
-@login_required
-@require_POST
-def edit_lists(request):
-    return render(request, 'todo/index.html', {})
+    elif request.method == 'POST':
+        try:
+            new_list = TodoList(name=request.POST['todolist_name'], owner=request.user)
+            new_list.save()
+            return HttpResponse("", status=200)
+        except AttributeError, ValueError:
+            return HttpResponse("", status=400)
 
 
 @require_http_methods(['GET', 'POST'])

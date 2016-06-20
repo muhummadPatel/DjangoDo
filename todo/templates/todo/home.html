@@ -17,65 +17,121 @@
     </div>
 
     <div class="row">
+      <!-- todo lists card -->
       <div class="col s12 m5 z-depth-2 collection with-header">
         <h4 class="collection-header">Lists</h4>
         <div id="user-list-names">
           <!-- populated by ajax request -->
         </div>
 
-        <a href="#modal1" class="collection-item modal-trigger"><i class="material-icons md-18">add</i></a>
+        <a href="#add-list-modal" class="collection-item modal-trigger"><i class="material-icons md-18">add</i></a>
         <!--<a class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons">add</i></a>-->
       </div>
 
-      <div class="col s12 m5 offset-m1" style="background:yellow;">
-        <!--
-          TODO: display all list items as checkboxes with labels showing item text.
-          TODO: js to populate the page and hadle updating the view and
-          posting/getting data from the backend.
-        -->
-        <p>
-          [PLACEHOLDER]
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        </p>
+      <!-- todo items card -->
+
+      <div class="col s12 m5 offset-m1 z-depth-2 collection with-header">
+        <h4 id="active-list-name" class="collection-header">Todo Items</h4>
+        <div id="list-items">
+          <p id="list-items-prompt">
+            Please select one of your lists
+          </p>
+          <!-- populated by ajax request -->
+        </div>
+
+        <a href="#add-item-modal" class="collection-item modal-trigger hide"><i class="material-icons md-18">add</i></a>
+        <!--<a class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons">add</i></a>-->
       </div>
     </div>
   </div>
 
 
   <!-- modal: create new todolist -->
-  <div id="modal1" class="modal">
+  <div id="add-list-modal" class="modal">
     <div class="modal-content">
       <h4>New Todo List</h4>
 
-      <form id="new_list_form" method="post" action=".">
+      <form id="new-list-form" method="post" action=".">
         {% csrf_token %}
 
         <div class="input-field">
-          <input id="todolist_name" type="text" class="validate">
-          <label for="todolist_name">List Name</label>
+          <input id="todolist-name" type="text" class="validate">
+          <label for="todolist-name">List Name</label>
         </div>
       </form>
     </div>
 
     <div class="modal-footer">
-      <button class="modal-action modal-close btn orange waves-effect waves-light" form="new_list_form" type="submit" name="action">Create<i class="material-icons right">send</i></button>
+      <button class="modal-action modal-close btn orange waves-effect waves-light" form="new-list-form" type="submit" name="action">Create<i class="material-icons right">send</i></button>
+    </div>
+  </div>
+
+
+  <!-- modal: add new item -->
+  <div id="add-item-modal" class="modal">
+    <div class="modal-content">
+      <h4>New Todo Item</h4>
+
+      <form id="new-item-form" method="post" action="">
+        {% csrf_token %}
+
+        <div class="input-field">
+          <input id="todo-item-text" type="text" class="validate">
+          <label for="todo-item-text">Todo Item Text</label>
+        </div>
+      </form>
+    </div>
+
+    <div class="modal-footer">
+      <button class="modal-action modal-close btn orange waves-effect waves-light" form="new-item-form" type="submit" name="action">Create<i class="material-icons right">send</i></button>
     </div>
   </div>
 {% endblock main_body_b %}
 
 {% block extra_js_b %}
-{# <a href="#!" class="collection-item active">{{todo_list.name}}</a> #}
   <script>
-    $.getJSON("{% url 'todo:lists'%}", function(user_lists){
-      $.each(user_lists, function(index, user_list){
-        list_name = user_list["fields"]["name"];
-        $("#user-list-names").append("<a href=\"#!\" class=\"collection-item\">" + list_name + "</a>");
-      })
+    (function($){
+      update_lists();
+    })(jQuery);
+
+    // Get all the users lists and add them to the page
+    function update_lists(){
+      $("#user-list-names").empty();
+      $.getJSON("{% url 'todo:lists'%}", function(user_lists){
+        $.each(user_lists, function(index, user_list){
+          list_id = user_list["pk"];
+          list_name = user_list["fields"]["name"];
+          $("#user-list-names").append("<a id=\"listid_" + list_id + "\" href=\"#\" class=\"collection-item\">" + list_name + "</a>");
+        })
+      });
+    }
+
+    // Add a new list when the user submits the new-list-form
+    function create_list(list_name){
+      console.log("creating list:" + list_name);
+      data = { todolist_name: list_name };
+      $.post("{% url 'todo:lists' %}", data, function(){
+        console.log("Successfully created " + list_name);
+        update_lists();
+      }).fail(function(){
+        alert("Sorry. Could not create " + list_name);
+      });
+    }
+    $("#new-list-form").on('submit', function(event){
+      event.preventDefault();
+      list_name = $("#todolist-name").val();
+      create_list(list_name);
     });
 
-    $(".collection-item").on("click", function(){
+    // When the user clicks on one of their lists, make it active and show the items
+    $("#user-list-names").on("click", ".collection-item", function(){
+      // make the selected list active
       $(".collection-item").removeClass("active");
       $(this).addClass("active");
+
+      // get and display the items in this list
+      // list_items = get_list_items(list_id)
+      console.log($(this).attr("id"));
     });
   </script>
 {% endblock extra_js_b %}
