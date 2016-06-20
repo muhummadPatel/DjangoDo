@@ -1,11 +1,15 @@
 from django.contrib.auth.decorators import login_required
+from django.core import serializers
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_list_or_404, get_object_or_404, render
-from django.views.decorators.http import require_GET, require_http_methods
+from django.views.decorators.http import require_GET, require_POST, require_http_methods
 
 from .models import Todo, TodoList
 
+
+# TODO: POST a new list
+# TODO: POST to update the items in a list
 
 @require_GET
 def index(request):
@@ -23,11 +27,15 @@ def home(request):
 @login_required
 @require_GET
 def lists(request):
-    todo_lists = get_list_or_404(TodoList)
-    context = {
-        'todo_lists': todo_lists
-    }
-    return render(request, 'todo/lists.html', context)
+    user_todo_lists = TodoList.objects.filter(owner__exact=request.user)
+    response_data = serializers.serialize('json', user_todo_lists)
+    return HttpResponse(response_data, content_type='application/json')
+
+
+@login_required
+@require_POST
+def edit_lists(request):
+    return render(request, 'todo/index.html', {})
 
 
 @require_http_methods(['GET', 'POST'])

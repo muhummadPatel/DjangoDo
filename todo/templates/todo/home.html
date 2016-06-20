@@ -3,7 +3,9 @@
 {% block nav_ul_desktop_b %}
   <li><a href="{% url 'auth_logout' %}">Logout</li>
 {% endblock nav_ul_desktop_b %}
-{% block nav_ul_mobile_b %}{% endblock nav_ul_mobile_b %}
+{% block nav_ul_mobile_b %}
+  <li><a href="{% url 'auth_logout' %}">Logout</li>
+{% endblock nav_ul_mobile_b %}
 
 {% block title_b %} DjangoDo - Home {% endblock title_b %}
 
@@ -17,10 +19,10 @@
     <div class="row">
       <div class="col s12 m5 z-depth-2 collection with-header">
         <h4 class="collection-header">Lists</h4>
-        <a href="#!" class="collection-item active">Alvin</a>
-        <a href="#!" class="collection-item">Alvin</a>
-        <a href="#!" class="collection-item">Alvin</a>
-        <a href="#!" class="collection-item">Alvin</a>
+        <div id="user-list-names">
+          <!-- populated by ajax request -->
+        </div>
+
         <a href="#modal1" class="collection-item modal-trigger"><i class="material-icons md-18">add</i></a>
         <!--<a class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons">add</i></a>-->
       </div>
@@ -60,3 +62,20 @@
     </div>
   </div>
 {% endblock main_body_b %}
+
+{% block extra_js_b %}
+{# <a href="#!" class="collection-item active">{{todo_list.name}}</a> #}
+  <script>
+    $.getJSON("{% url 'todo:lists'%}", function(user_lists){
+      $.each(user_lists, function(index, user_list){
+        list_name = user_list["fields"]["name"];
+        $("#user-list-names").append("<a href=\"#!\" class=\"collection-item\">" + list_name + "</a>");
+      })
+    });
+
+    $(".collection-item").on("click", function(){
+      $(".collection-item").removeClass("active");
+      $(this).addClass("active");
+    });
+  </script>
+{% endblock extra_js_b %}
