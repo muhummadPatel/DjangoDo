@@ -6,6 +6,25 @@
  * Made By MaterializeCSS.com
  */
 
+.collection .collection-item:last-child {
+   border-bottom: 1px solid #e0e0e0;
+}
+
+.collection .collection-item.active {
+  /*background-color: #26a69a;
+  color: #eafaf9;*/
+  background-color: #ffe0b2;
+  color: #009688;
+}
+
+.collection .collection-item.active .secondary-content {
+  color: #009688;
+}
+
+.collection-item label {
+  color: black;
+}
+
 .icon-block {
   padding: 0 15px;
 }
