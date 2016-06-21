@@ -1,6 +1,9 @@
 # sqlite database
 *.sqlite3
 
+# static files
+staticfiles/
+
 # bower_components
 bower_components
 
