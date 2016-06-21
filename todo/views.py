@@ -35,14 +35,14 @@ def lists(request):
     elif request.method == 'POST':
         try:
             new_list_name = request.POST['todolist_name']
-            if new_list_name == "":
-                raise ValueError("Cannot create list with empty name")
+            if new_list_name == '':
+                raise ValueError('Cannot create list with empty name')
 
             new_list = TodoList(name=new_list_name, owner=request.user)
             new_list.save()
-            return HttpResponse("", status=200)
+            return HttpResponse('', status=200)
         except AttributeError, ValueError:
-            return HttpResponse("", status=400)
+            return HttpResponse('', status=400)
 
 
 @login_required
@@ -51,7 +51,7 @@ def delete_list(request, list_id):
     # TODO: handle other errors? are there any other errors?
     todo_list = get_object_or_404(TodoList, pk=list_id, owner__exact=request.user)
     todo_list.delete()
-    return HttpResponse("", status=200)
+    return HttpResponse('', status=200)
 
 
 @login_required
@@ -77,14 +77,14 @@ def lists_items(request, list_id):
             # for larger forms by using a form class (in forms.py) to handle
             # validating form submission inputs.
             new_item_text = request.POST['item_text']
-            if new_item_text == "":
-                raise ValueError("Cannot create item with empty item_text")
+            if new_item_text == '':
+                raise ValueError('Cannot create item with empty item_text')
 
             new_item = Todo(parent_list=todo_list, item_text=new_item_text, completed=False)
             new_item.save()
-            return HttpResponse("", status=200)
+            return HttpResponse('', status=200)
         except AttributeError, ValueError:
-            return HttpResponse("", status=400)
+            return HttpResponse('', status=400)
 
 
 @login_required
@@ -96,7 +96,7 @@ def edit_item(request, list_id, item_id):
     status = (request.POST['item_status'] == 'true')
     todo_item.completed = status
     todo_item.save()
-    return HttpResponse("", status=200)
+    return HttpResponse('', status=200)
 
 
 @login_required
@@ -106,4 +106,4 @@ def delete_item(request, list_id, item_id):
     todo_list = get_object_or_404(TodoList, pk=list_id, owner__exact=request.user)
     todo_item = get_object_or_404(Todo, pk=item_id)
     todo_item.delete()
-    return HttpResponse("", status=200)
+    return HttpResponse('', status=200)
