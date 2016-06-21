@@ -45,7 +45,14 @@
     <div class="footer-copyright">
       <div class="container">
         {% block footer_copyright_b %}
-          Made by <a class="teal-text text-lighten-3" href="#">Muhummad Patel</a>
+          <div style="float:left;">
+            <iframe src="https://ghbtns.com/github-btn.html?user=muhummadPatel&repo=DjangoDo&type=watch" frameborder="0" scrolling="0" height="20px"></iframe>
+          </div>
+          <div style="float:right;">
+            <a class="teal-text text-lighten-3" href="https://github.com/muhummadPatel" target="_blank">
+              <i class="fa fa-github"></i> Muhummad Patel
+            </a> 2016
+          </div>
         {% endblock footer_copyright_b %}
       </div>
     </div>
@@ -55,6 +62,7 @@
   <!--  Scripts-->
   {% javascript 'libraries' %}
   {% javascript 'init_js' %}
+  <script src="https://use.fontawesome.com/20df5a4fda.js"></script>
   {% block extra_js_b %}{% endblock extra_js_b %}
 
   </body>
