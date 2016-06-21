@@ -207,13 +207,41 @@
       list_id = $("[id^=active-list-name]").attr("id").match(/\d+/g);
       if(list_id.length == 0){
         alert("Sorry, an error occurred. :/");
-        return;
+        return false;
       }else{
         list_id = list_id[0];
       }
 
       data = { item_text: new_item_text };
       $.post("/lists/" + list_id + "/items/", data, function(){
+        update_items(list_id);
+      }).fail(function(){
+        alert("Sorry, an error occurred. :/");
+      });
+    });
+
+    // Delete an item when the user clicks the trash can
+    $("#list-items").on("click", ".secondary-content", function(){
+      event.preventDefault();
+
+      // get the id of the item to be deleted and it's list
+      list_id = $("[id^=active-list-name]").attr("id").match(/\d+/g);
+      if(list_id.length == 0){
+        alert("Sorry, an error occurred. :/");
+        return false;
+      }else{
+        list_id = list_id[0];
+      }
+      item_id = $(this).attr("id").match(/\d+/g);
+      if(item_id.length == 0){
+        alert("Sorry, an error occurred. :/");
+        return false;
+      }else{
+        item_id = item_id[0];
+      }
+
+      // POST to delete the specified list
+      $.post("/lists/" + list_id + "/items/" + item_id + "/delete/", function(){
         update_items(list_id);
       }).fail(function(){
         alert("Sorry, an error occurred. :/");

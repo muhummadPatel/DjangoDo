@@ -9,4 +9,5 @@ urlpatterns = [
     url(r'^lists/$', views.lists, name='lists'),
     url(r'^lists/(?P<list_id>[\w]+)/delete/$', views.delete_list, name='delete_list'),
     url(r'^lists/(?P<list_id>[\w]+)/items/$', views.lists_items, name='lists_items'),
+    url(r'^lists/(?P<list_id>[\w]+)/items/(?P<item_id>[\w]+)/delete/$', views.delete_item, name='delete_item'),
 ]
