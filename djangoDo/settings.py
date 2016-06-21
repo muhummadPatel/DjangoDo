@@ -160,5 +160,11 @@ PIPELINE = {
             ),
             'output_filename': 'js/init_js.min.js',
         },
+        'home_js': {
+            'source_filenames': (
+                'todo/js/home.js',
+            ),
+            'output_filename': 'js/home_js.min.js',
+        },
     }
 }
