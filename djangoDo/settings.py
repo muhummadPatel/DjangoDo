@@ -25,10 +25,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = secrets.DJANGO_SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = [
+    'localhost',
+]
 
 # Application definition
 
@@ -44,6 +45,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE_CLASSES = [
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -126,11 +128,14 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
-STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
+STATICFILES_STORAGE = 'djangoDo.storage.GzipManifestPipelineStorage'
+
 PIPELINE = {
-    'PIPELINE_ENABLED': False,
-    'PIPELINE_COLLECTOR_ENABLED': False,
+    'PIPELINE_ENABLED': True,
+    'CSS_COMPRESSOR': 'pipeline.compressors.NoopCompressor',
+    'JS_COMPRESSOR': 'pipeline.compressors.NoopCompressor',
     'STYLESHEETS': {
         'libraries': {
             'source_filenames': (
@@ -146,13 +151,13 @@ PIPELINE = {
         },
     },
     'JAVASCRIPT': {
-        'libraries': {
+        'libs_js': {
             'source_filenames': (
-              'todo/bower_components/jquery/dist/jquery.js',
-              'todo/bower_components/Materialize/dist/js/materialize.js',
-              'todo/bower_components/js-cookie/src/js.cookie.js',
+                'todo/bower_components/jquery/dist/jquery.js',
+                'todo/bower_components/Materialize/dist/js/materialize.js',
+                'todo/bower_components/js-cookie/src/js.cookie.js',
             ),
-            'output_filename': 'js/libs.min.js',
+            'output_filename': 'js/libs_js.min.js',
         },
         'init_js': {
             'source_filenames': (
