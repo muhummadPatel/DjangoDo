@@ -89,6 +89,17 @@ def lists_items(request, list_id):
 
 @login_required
 @require_POST
+def edit_item(request, list_id, item_id):
+    todo_list = get_object_or_404(TodoList, pk=list_id, owner__exact=request.user)
+    todo_item = get_object_or_404(Todo, pk=item_id)
+
+    todo_item.completed = request.POST['item_status']
+    todo_item.save()
+    return HttpResponse("", status=200)
+
+
+@login_required
+@require_POST
 def delete_item(request, list_id, item_id):
     # TODO: handle other errors? are there any other errors?
     todo_list = get_object_or_404(TodoList, pk=list_id, owner__exact=request.user)

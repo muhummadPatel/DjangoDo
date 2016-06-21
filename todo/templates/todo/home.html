@@ -248,6 +248,25 @@
       });
     });
 
+    // Update item status when the user changes a checkbox
+    $("#list-items").on("change", "[id^=listitem]",function(){
+      status = $(this).is(":checked");
+      item_id = $(this).attr("id").match(/\d+/g);
+      if(item_id.length == 0){
+        alert("Sorry, an error occurred. :/");
+        return false;
+      }else{
+        item_id = item_id[0];
+      }
+
+      data = { item_status: status};
+      $.post("/lists/" + list_id + "/items/" + item_id + "/", data, function(){
+        update_items(list_id);
+      }).fail(function(){
+        alert("Sorry, an error occurred. :/");
+      });
+    });
+
     // When the user clicks on one of their lists, make it active and show the items
     $("#user-list-names").on("click", ".collection-item a", function(){
       event.preventDefault();
