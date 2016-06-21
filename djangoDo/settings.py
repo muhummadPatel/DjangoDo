@@ -133,7 +133,6 @@ STATIC_URL = '/static/'
 STATICFILES_STORAGE = 'djangoDo.storage.GzipManifestPipelineStorage'
 
 PIPELINE = {
-    'PIPELINE_ENABLED': True,
     'CSS_COMPRESSOR': 'pipeline.compressors.NoopCompressor',
     'JS_COMPRESSOR': 'pipeline.compressors.NoopCompressor',
     'STYLESHEETS': {
