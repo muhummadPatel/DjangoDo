@@ -84,7 +84,7 @@ DATABASES = {
         'NAME': 'djangodo',
         'USER': os.environ['POSTGRESQL_USER'],
         'PASSWORD': os.environ['POSTGRESQL_PASSWORD'],
-        'HOST': 'localhost',
+        'HOST': os.environ['POSTGRESQL_HOST'],
         'PORT': '',
     }
 }
