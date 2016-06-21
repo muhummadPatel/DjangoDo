@@ -1,1 +1,24 @@
-404 page
+{% extends "base_page.html" %}
+
+{% block title_b %}
+  DjangoDo - Page Not Found
+{% endblock title_b %}
+
+{% block main_body_b %}
+  <div class="container">
+    <br />
+
+    <!-- Heading and subtitle -->
+    <h1 class="header center orange-text">404</h1>
+    <div class="row center">
+      <h5 class="header col s12 light">Page Not Found</h5>
+      <p class="light">
+        Oops! Looks like you've taken a wrong turn
+      </p>
+    </div>
+
+    <div class="row center">
+      <a href="{% url 'todo:index' %}" class="btn-large waves-effect waves-light orange">DjangoDo Home</a>
+    </div>
+  </div>
+{% endblock main_body_b %}
