@@ -56,7 +56,7 @@ def delete_list(request, list_id):
 
 @login_required
 @require_http_methods(['GET', 'POST'])
-def lists_detail(request, list_id):
+def lists_items(request, list_id):
     # do this first get so that a 404 is raised if the list does not exist
     todo_list = get_object_or_404(TodoList, pk=list_id, owner__exact=request.user)
 
