@@ -17,6 +17,11 @@
   color: #039be5;
 }
 
+div .switch {
+  float: right;
+  padding-top: 1.5rem;
+}
+
 .icon-block {
   padding: 0 15px;
 }
