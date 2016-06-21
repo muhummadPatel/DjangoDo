@@ -63,7 +63,7 @@ def lists_items(request, list_id):
     if request.method == 'GET':
         todo_items = []
         try:
-            todo_items = Todo.objects.filter(parent_list=list_id).order_by('completed')
+            todo_items = Todo.objects.filter(parent_list=list_id).order_by('completed', 'item_text')
         except Todo.DoesNotExist:
             # if the list is currently empty, return an empty response to the client
             pass
