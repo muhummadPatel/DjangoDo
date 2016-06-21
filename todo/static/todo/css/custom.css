@@ -1,18 +1,10 @@
 /* Custom Stylesheet */
-/**
- * Use this file to override Materialize files so you can update
- * the core Materialize files in the future
- *
- * Made By MaterializeCSS.com
- */
 
 .collection .collection-item:last-child {
    border-bottom: 1px solid #e0e0e0;
 }
 
 .collection .collection-item.active {
-  /*background-color: #26a69a;
-  color: #eafaf9;*/
   background-color: #ffe0b2;
   color: #009688;
 }
@@ -22,7 +14,7 @@
 }
 
 .collection-item label {
-  color: black;
+  color: #039be5;
 }
 
 .icon-block {
