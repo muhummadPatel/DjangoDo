@@ -1,5 +1,5 @@
 {
-  "name": "DjangoDo",
+  "name": "djangodo",
   "version": "0.1.0",
   "dependencies": {
     "Materialize": "materialize#^0.97.6",

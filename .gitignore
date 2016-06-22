@@ -3,9 +3,8 @@
 
 # static files
 staticfiles/
-
-# bower_components
 bower_components
+node_modules/
 
 # secret keys
 secrets.py
