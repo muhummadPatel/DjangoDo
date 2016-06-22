@@ -1,8 +1,8 @@
 from django.conf.urls import include, url
 from django.views.generic.base import TemplateView
+import os
 
 from . import views
-from djangoDo import settings
 
 app_name = "todo"
 urlpatterns = [
@@ -17,7 +17,7 @@ urlpatterns = [
 
 
 # to help test 400, and 500 templates during dev
-if settings.DEBUG:
+if not os.environ.get('PROD'):
     urlpatterns += (
         url(r'^404/$', TemplateView.as_view(template_name='404.html'), name='test404'),
         url(r'^500/$', TemplateView.as_view(template_name='500.html'), name='test500'),
