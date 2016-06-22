@@ -81,17 +81,19 @@ WSGI_APPLICATION = 'djangoDo.wsgi.application'
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
 
 DATABASES = {}
-DATABASES['default'] = dj_database_url.config()
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'djangodo',
-#         'USER': os.environ['POSTGRESQL_USER'],
-#         'PASSWORD': os.environ['POSTGRESQL_PASSWORD'],
-#         'HOST': os.environ['POSTGRESQL_HOST'],
-#         'PORT': '',
-#     }
-# }
+if os.environ.get('STAGE') == 'prod':
+    DATABASES['default'] = dj_database_url.config()
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'djangodo',
+            'USER': os.environ['POSTGRESQL_USER'],
+            'PASSWORD': os.environ['POSTGRESQL_PASSWORD'],
+            'HOST': os.environ['POSTGRESQL_HOST'],
+            'PORT': '',
+        }
+    }
 
 LOGIN_REDIRECT_URL = '/home'
 
